@@ -1,0 +1,64 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+  },
+  "plugins": [
+    "@typescript-eslint",
+  ],
+  "extends": [
+    "airbnb-typescript",
+    "airbnb/hooks",
+    "plugin:@typescript-eslint/recommended",
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+  },
+  "globals": {
+    "describe": true,
+    "it": true,
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "17",
+    },
+    "import/resolver": {
+      "node": {},
+    },
+  },
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/no-floating-promises": [1, { "ignoreVoid": true }],
+    "@typescript-eslint/no-misused-promises": 1,
+    "@typescript-eslint/ban-types": [
+      "error",
+      {
+        "extendDefaults": true,
+        "types": {
+          "{}": false
+        }
+      }
+    ],
+    "@typescript-eslint/naming-convention": 0,
+    "no-restricted-syntax": ["error", "WithStatement"],
+    "class-methods-use-this": 0,
+    "max-len": ["error", { "code": 160 }],
+    "no-void": 0,
+    "no-nested-ternary": 0,
+    "no-multi-assign": 0,
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsForRegex": ["draft"] }],
+    "react/jsx-props-no-spreading": 0,
+    "react/prop-types": 0,
+    "react/require-default-props": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-fragments": [2, "element"],
+    "import/prefer-default-export": 0,
+    "import/no-cycle": 0,
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/test/**", "**/typings/**" ]}],
+    "jsx-a11y/anchor-is-valid": 0,
+  },
+}

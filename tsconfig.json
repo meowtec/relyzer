@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig-build.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "paths": {
+      "@relyzer/*": ["./packages/*/src"],
+    },
+  },
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig-build.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "es2020",
+    "outDir": "./lib",                        /* Redirect output structure to the directory. */
+    "rootDir": "./src",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+  },
+  "include": [
+    "src", "typings"
+  ]
+}

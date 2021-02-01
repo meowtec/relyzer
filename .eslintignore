@@ -1,0 +1,11 @@
+node_modules
+packages/*/lib
+packages/*/es
+packages/*/coverage
+packages/**/dist
+packages/**/out
+packages/**/output
+packages/**/build
+packages/**/test/**.js
+**/test/**/fixtures
+examples
