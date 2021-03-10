@@ -1,6 +1,6 @@
 {
   "name": "@relyzer/client",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "relyzer client",
   "author": "meowtec <bertonzh@gmail.com>",
   "homepage": "https://github.com/meowtec/relyzer",
@@ -30,7 +30,7 @@
     "@material-ui/styles": "^5.0.0-alpha.25",
     "@popperjs/core": "^2.6.0",
     "@react-hook/merged-ref": "^1.3.0",
-    "@relyzer/shared": "0.0.0",
+    "@relyzer/shared": "^1.0.0-alpha.0",
     "eventemitter3": "^4.0.7",
     "immer": "^8.0.0",
     "jss": "^10.5.1",
