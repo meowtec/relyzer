@@ -38,14 +38,18 @@ class Backend {
   }
 
   watchInspectedInstance() {
-    this.useComponent((globalThis as any).$r);
+    let { $r } = (globalThis as any);
+    this.useComponent($r);
 
     Object.defineProperty(globalThis, '$r', {
       configurable: true,
 
-      get: () => this.component,
+      get: () => $r,
 
-      set: (instance: DevtoolComponentInstance) => this.useComponent(instance),
+      set: (instance: DevtoolComponentInstance) => {
+        $r = instance;
+        this.useComponent(instance);
+      },
     });
   }
 
