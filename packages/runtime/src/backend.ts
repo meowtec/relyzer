@@ -16,7 +16,7 @@ function getComponentClassOrFunction(component: DevtoolComponentInstance) {
 }
 
 function findHookCollector(component: DevtoolComponentInstance | null): Collector | null {
-  const hook = component?.hooks?.find((item) => item.name.toUpperCase() === 'REFILM');
+  const hook = component?.hooks?.find((item) => item.name.toUpperCase() === 'RELYZER');
 
   return hook?.subHooks.find((item) => item.value?.$$typeof === 'relyzer')?.value;
 }
