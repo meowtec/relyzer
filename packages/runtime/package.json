@@ -13,8 +13,7 @@
     "test": "test"
   },
   "files": [
-    "lib",
-    "es"
+    "lib"
   ],
   "publishConfig": {
     "access": "public"

@@ -63,7 +63,7 @@ const config = {
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
     new webpack.DefinePlugin({
-      'window.NEVER_TO_EMPTY': 'true',
+      'window.__RELYZER_DEV__': process.env.__RELYZER_DEV__,
     }),
   ].filter(Boolean),
 };

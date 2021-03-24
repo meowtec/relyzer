@@ -73,7 +73,10 @@ class Backend {
    */
   useComponent = throttle((component: DevtoolComponentInstance | null) => {
     if (component === this.component) return;
-    if ((window as any).NEVER_TO_EMPTY) {
+
+    // do not show `component can not be inspected` if leave from an inspect-able component
+    // useful for developing relyzer self
+    if ((globalThis as any).__RELYZER_DEV__) {
       const hook = findHookCollector(component);
       if (!hook) return;
     }
