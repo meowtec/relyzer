@@ -71,10 +71,10 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "devDependencies": {
+    "@relyzer/babel": "^1.0.0-alpha.0",
+    "@relyzer/runtime": "^1.0.0-alpha.0",
     "gh-pages": "^2.2.0",
-    "serve": "^10.0.2",
-    "@relyzer/babel": "file:../../packages/babel",
-    "@relyzer/runtime": "file:../../packages/runtime"
+    "serve": "^10.0.2"
   },
   "scripts": {
     "dev": "node scripts/start.js",
