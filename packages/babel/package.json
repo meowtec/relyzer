@@ -18,7 +18,7 @@
     "access": "public"
   },
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "build": "rm -rf lib && tsc --project tsconfig-build.json",
     "lint": "tsc --noEmit --project tsconfig-build.json",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text mocha -r ts-node/register/transpile-only **/*.test.ts"

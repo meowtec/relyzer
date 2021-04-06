@@ -19,7 +19,7 @@
     "access": "public"
   },
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "build": "rm -rf lib && tsc --project tsconfig-build.json",
     "watch": "tsc --project tsconfig-build.json -w",
     "lint": "tsc --noEmit --project tsconfig-build.json",

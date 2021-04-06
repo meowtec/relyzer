@@ -14,11 +14,11 @@
     "access": "public"
   },
   "scripts": {
+    "prepublishOnly": "npm run tsc && npm run build",
     "start": "vite",
     "build": "npm run tsc && vite build",
     "tsc": "rm -rf lib && tsc --project tsconfig-build.json",
-    "watch": "tsc --project tsconfig-build.json -w",
-    "prepublish": "npm run tsc && npm run build"
+    "watch": "tsc --project tsconfig-build.json -w"
   },
   "dependencies": {
     "@emotion/cache": "^11.1.3",
