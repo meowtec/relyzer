@@ -1,6 +1,6 @@
 {
   "name": "@relyzer/runtime",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "relyzer runtime",
   "author": "meowtec <bertonzh@gmail.com>",
   "homepage": "https://github.com/meowtec/relyzer",
@@ -26,8 +26,8 @@
     "test": "nyc --reporter=lcov --reporter=text mocha -r ts-node/register/transpile-only **/*.test.ts"
   },
   "dependencies": {
-    "@relyzer/client": "^1.0.0-alpha.0",
-    "@relyzer/shared": "^1.0.0-alpha.0",
+    "@relyzer/client": "^1.0.0-alpha.1",
+    "@relyzer/shared": "^1.0.0-alpha.1",
     "eventemitter3": "^4.0.7",
     "lodash": "^4.17.20"
   },
