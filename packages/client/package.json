@@ -17,6 +17,7 @@
     "prepublishOnly": "npm run tsc && npm run build",
     "start": "vite",
     "build": "npm run tsc && vite build",
+    "lint": "tsc --noEmit --project tsconfig-build.json",
     "tsc": "rm -rf lib && tsc --project tsconfig-build.json",
     "watch": "tsc --project tsconfig-build.json -w"
   },

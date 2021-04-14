@@ -11,7 +11,7 @@
   "scripts": {
     "build": "lerna run build",
     "watch": "lerna run watch --parallel",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx . && npx lerna run lint"
+    "lint": "npx lerna run lint && eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "dependencies": {
     "react": "^17.0.1",

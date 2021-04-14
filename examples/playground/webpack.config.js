@@ -19,7 +19,7 @@ const config = {
         'react',
         'react-dom',
       ], (pkg) => [pkg, path.resolve(`node_modules/${pkg}`)])),
-      // '@relyzer/client': '@relyzer/client/lib',
+      '@relyzer/client': '@relyzer/client/lib',
     },
   },
 
