@@ -79,6 +79,11 @@ export class Bridge<InComming extends Record<string, any>, OutComming extends Re
       data,
     });
   }
+
+  destroy() {
+    this.removeAllListeners();
+    this.provider.unsubscribe?.();
+  }
 }
 
 export type BackendBridge = Bridge<ClientMessages, BackendMessages>;

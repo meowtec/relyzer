@@ -19,7 +19,15 @@ if (!customElements.get(TAG_NAME)) {
   customElements.define('relyzer-debugger', HTMLDivElement, { extends: 'div' });
 }
 
-export function createHookDebugger(root: HTMLElement, bridgeProvider: BridgeProvider) {
+export function createHookDebugger({
+  root,
+  bridgeProvider,
+  onPopout,
+}: {
+  root: HTMLElement;
+  bridgeProvider: BridgeProvider;
+  onPopout: () => void;
+}) {
   const createDiv = () => document.createElement('div');
 
   const div = document.createElement('relyzer-debugger');
@@ -63,7 +71,9 @@ export function createHookDebugger(root: HTMLElement, bridgeProvider: BridgeProv
         <CacheProvider
           value={emotionCache}
         >
-          <InspectFrame>
+          <InspectFrame
+            onPopout={onPopout}
+          >
             <App
               bridge={bridge}
             />
@@ -73,4 +83,8 @@ export function createHookDebugger(root: HTMLElement, bridgeProvider: BridgeProv
     </RenderRootContext.Provider>,
     appRoot,
   );
+
+  return () => {
+    ReactDOM.unmountComponentAtNode(appRoot);
+  };
 }

@@ -2,12 +2,11 @@ import {
   BridgeProvider,
 } from '@relyzer/shared';
 
-export const backendBridgeProvider: BridgeProvider = (receive) => {
-  const win = window.open('http://localhost:8880');
-
+export const createBackendBridgeProvider: (win: Window) => BridgeProvider = (win) => (receive) => {
   const onMessage = (ev: MessageEvent<any>) => {
     if (ev.data) receive(ev.data);
   };
+
   window.addEventListener('message', onMessage);
 
   return {

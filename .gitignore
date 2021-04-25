@@ -17,3 +17,4 @@ es
 dist
 build
 .vscode
+**/*.tsbuildinfo

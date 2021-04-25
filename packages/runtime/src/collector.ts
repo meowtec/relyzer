@@ -26,8 +26,6 @@ export default class Collector extends EventEmitter {
 
   createdAt = performance.now();
 
-  enabled = false;
-
   updatedTimes = 0;
 
   frames: CollectorFrame[] = [];
@@ -45,13 +43,6 @@ export default class Collector extends EventEmitter {
 
   public get code() {
     return this.component.code;
-  }
-
-  /**
-   * 启用 / 禁用
-   */
-  enable(enabled: boolean) {
-    this.enabled = enabled;
   }
 
   /**

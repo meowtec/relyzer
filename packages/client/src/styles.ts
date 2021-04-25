@@ -49,6 +49,7 @@ export const commonStyles = {
 export const globalCss = /* css */ `
   :host {
     all: initial;
+    cursor: inherit;
     font-size: 12px;
   }
 

@@ -3,6 +3,7 @@
 import path from 'path';
 import reactRefresh from '@vitejs/plugin-react-refresh';
 import disableReactDevtool from './vite/disable-react-devtool';
+import relyzer from './vite/babel-relyzer';
 
 /**
  * @type { import('vite').UserConfig }
@@ -11,6 +12,7 @@ const config = {
   plugins: [
     reactRefresh(),
     disableReactDevtool(),
+    relyzer(),
   ],
   optimizeDeps: {
     include: [

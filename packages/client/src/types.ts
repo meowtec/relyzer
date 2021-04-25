@@ -3,4 +3,5 @@ export enum DevtoolPlacement {
   right,
   bottom,
   left,
+  external,
 }

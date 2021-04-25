@@ -68,31 +68,33 @@ export default function App({
     return () => unsubscribes.forEach((off) => off());
   }, [bridge]);
 
-  return appVisible ? (
+  return (
     <BridgeContext.Provider
       value={bridge}
     >
       <Global styles={globalCss + highlightCss} />
-      <div
-        style={{
-          height: '100%',
-          padding: 12,
-        }}
-      >
-        {instance?.collector.id != null ? (
-          <FrameView
-            key={instance.collector.id}
-            collectorId={instance.collector.id}
-            code={instance.collector.component.code}
-            observedList={instance.collector.component.observedList}
-            updatedTimes={instance.collector.updatedTimes}
-            frames={instance.frames}
-            latestFrame={instance.collector.latestFrame || null}
-          />
-        ) : (
-          <Empty selectedComponentName={instance?.collector.component.name} />
-        )}
-      </div>
+      {appVisible ? (
+        <div
+          style={{
+            height: '100%',
+            padding: 12,
+          }}
+        >
+          {instance?.collector.id != null ? (
+            <FrameView
+              key={instance.collector.id}
+              collectorId={instance.collector.id}
+              code={instance.collector.component.code}
+              observedList={instance.collector.component.observedList}
+              updatedTimes={instance.collector.updatedTimes}
+              frames={instance.frames}
+              latestFrame={instance.collector.latestFrame || null}
+            />
+          ) : (
+            <Empty selectedComponentName={instance?.collector.component.name} />
+          )}
+        </div>
+      ) : null}
     </BridgeContext.Provider>
-  ) : null;
+  );
 }

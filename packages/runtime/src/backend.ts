@@ -8,27 +8,21 @@ import {
 } from '@relyzer/shared';
 import { createHookDebugger } from '@relyzer/client';
 import Collector from './collector';
-
-function getComponentClassOrFunction(component: DevtoolComponentInstance) {
-  return component.isReactComponent
-    ? component.constructor as React.ComponentClass
-    : component.type;
-}
-
-function findHookCollector(component: DevtoolComponentInstance | null): Collector | null {
-  const hook = component?.hooks?.find((item) => item.name.toUpperCase() === 'RELYZER');
-
-  return hook?.subHooks.find((item) => item.value?.$$typeof === 'relyzer')?.value;
-}
+import { findHookCollector, getComponentClassOrFunction, listenOnClosed } from './utils';
+import { createBackendBridgeProvider } from './bridge-provider';
 
 class Backend {
   component: DevtoolComponentInstance | null = null;
 
   bridge: BackendBridge | null = null;
 
-  constructor(bridgeProvider: BridgeProvider) {
+  constructor() {
     this.watchInspectedInstance();
-    this.initBridge(bridgeProvider);
+    if (window.__RELYZER_EXTERNAL_ONLY__) {
+      this.createPostMessageBridge();
+    } else {
+      this.createInlineBridge();
+    }
   }
 
   componentSyncWeapSet = new WeakSet<Collector>();
@@ -37,11 +31,15 @@ class Backend {
     return findHookCollector(this.component);
   }
 
+  send: BackendBridge['send'] = (channel, msg) => {
+    this.bridge?.send(channel, msg);
+  };
+
   watchInspectedInstance() {
-    let { $r } = (globalThis as any);
+    let { $r } = window;
     this.useComponent($r);
 
-    Object.defineProperty(globalThis, '$r', {
+    Object.defineProperty(window, '$r', {
       configurable: true,
 
       get: () => $r,
@@ -59,7 +57,7 @@ class Backend {
     if (!this.componentSyncWeapSet.has(collector)) {
       this.sendCollectorInfo();
     } else {
-      this.bridge?.send('UPDATE', {
+      this.send('UPDATE', {
         id: collector.id,
         latestFrame: collector.latestFrame.toPlain(),
         updatedTimes: collector.updatedTimes,
@@ -74,9 +72,8 @@ class Backend {
   useComponent = throttle((component: DevtoolComponentInstance | null) => {
     if (component === this.component) return;
 
-    // do not show `component can not be inspected` if leave from an inspect-able component
-    // useful for developing relyzer self
-    if ((globalThis as any).__RELYZER_DEV__) {
+    // do not show `component can not be inspected` when developing using inline mode
+    if (window.__RELYZER_DEV__) {
       const hook = findHookCollector(component);
       if (!hook) return;
     }
@@ -94,10 +91,10 @@ class Backend {
     const { component, collector } = this;
 
     if (collector) {
-      this.bridge?.send('COMPONENT', collector.toPlain());
+      this.send('COMPONENT', collector.toPlain());
     } else {
       const componentType = component && getComponentClassOrFunction(component);
-      this.bridge?.send('COMPONENT', componentType ? {
+      this.send('COMPONENT', componentType ? {
         id: null,
         component: {
           name: componentType.displayName || componentType.name,
@@ -106,7 +103,7 @@ class Backend {
     }
   }
 
-  initBridge(bridgeProvider: BridgeProvider) {
+  createBridge(bridgeProvider: BridgeProvider) {
     const bridge: BackendBridge = new Bridge(bridgeProvider, 'BACKEND');
 
     this.bridge = bridge;
@@ -137,21 +134,43 @@ class Backend {
         });
       }
     });
+
+    return bridge;
   }
-}
 
-let injected = false;
+  destroyBridge(bridge: Bridge<any, any>) {
+    bridge.destroy();
+    this.bridge = null;
+  }
 
-export function injectDebugger() {
-  if (injected) return;
-  injected = true;
+  createPostMessageBridge() {
+    const win = window.open('http://localhost:8880');
+    if (win) {
+      const bridge = this.createBridge(createBackendBridgeProvider(win));
+      listenOnClosed(win, () => {
+        this.destroyBridge(bridge);
+        this.createInlineBridge();
+      });
+    }
+  }
 
-  // avoid react warn
-  setTimeout(() => {
+  createInlineBridge() {
     const bridgeProviderPair = createInlineBridgeProviderPair();
     const div = document.createElement('div');
     document.body.appendChild(div);
-    createHookDebugger(div, bridgeProviderPair[0]);
-    void new Backend(bridgeProviderPair[1]);
-  });
+    const inlineBridge = this.createBridge(bridgeProviderPair[1]);
+    const destoryInlineDebugger = createHookDebugger({
+      root: div,
+      bridgeProvider: bridgeProviderPair[0],
+      onPopout: () => {
+        destoryInlineDebugger();
+        this.destroyBridge(inlineBridge);
+        this.createPostMessageBridge();
+      },
+    });
+  }
+}
+
+export default function initBackend() {
+  void new Backend();
 }
