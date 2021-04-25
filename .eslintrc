@@ -59,7 +59,16 @@
     "react/jsx-fragments": [2, "element"],
     "import/prefer-default-export": 0,
     "import/no-cycle": 0,
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/test/**", "**/typings/**" ]}],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/test/**",
+          "**/typings/**",
+          "**/scripts/**",
+        ]
+      }
+    ],
     "jsx-a11y/anchor-is-valid": 0,
   },
 }

@@ -2,8 +2,7 @@
   "name": "example-webpack",
   "private": true,
   "scripts": {
-    "dev": "webpack serve --mode development --hot-only --port 3100",
-    "watch": "npm run dev & cd ../ && npm run watch"
+    "start": "webpack serve --mode development --hot-only --port 3100"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
