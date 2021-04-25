@@ -1,12 +1,13 @@
 import React, { useCallback, useRef, useLayoutEffect } from 'react';
 import { ObjectSummary } from '@relyzer/shared';
 import useMergedRef from '@react-hook/merged-ref';
-import ToBody from './to-body';
-import VariablePreview from './variable-value-preview';
-import CodeTokenDebug from './code-token-debug';
-import { commonStyles } from './styles';
+import ToBody from '../../components/to-body';
+import VariablePreview from '../variable-value-preview';
+import CodeTokenDebug from '../code-token-debug';
+import { commonStyles } from '../../styles';
 
 interface MarkerPopoverProps {
+  id: string;
   object: ObjectSummary;
   updatedTimes: number;
   attributes: Record<string, any> | undefined;
@@ -17,6 +18,7 @@ interface MarkerPopoverProps {
 
 function CodeMarkerPopover(
   {
+    id,
     style,
     object,
     attributes,
@@ -57,7 +59,7 @@ function CodeMarkerPopover(
         style={style}
         {...attributes}
         role="presentation"
-        id="code-marker-popover"
+        id={id}
         onKeyDown={handleKeyDown}
       >
         <div

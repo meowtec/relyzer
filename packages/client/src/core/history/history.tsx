@@ -4,7 +4,7 @@ import { ArrowBack, ArrowForward, FiberSmartRecord } from '@material-ui/icons';
 import range from 'lodash/range';
 import { useMeasure } from 'react-use';
 import useMergedRef from '@react-hook/merged-ref';
-import { RenderRootContext } from './context';
+import { RenderRootContext } from '../../context';
 
 interface UpdateHistoryProps {
   /**

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ObjectSummary } from '@relyzer/shared';
-import { atomColor } from './styles';
+import { atomColor } from '../../styles';
 
 interface PropsViewProps {
   props: Record<number, ObjectSummary>;

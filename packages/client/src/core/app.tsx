@@ -1,15 +1,17 @@
 import immer from 'immer';
-import React, {
+import {
   useContext,
   useEffect,
   useState,
 } from 'react';
+import { Global } from '@emotion/react';
 import {
   ClientBridge,
 } from '@relyzer/shared';
-import { FrameVisibleContext, BridgeContext, AppState } from './context';
-import FrameView from './frame-view';
-import Empty from './empty';
+import { FrameVisibleContext, BridgeContext, AppState } from '../context';
+import FrameView from './frame-view/frame-view';
+import Empty from './not-available';
+import { globalCss, highlightCss } from '../styles';
 
 export default function App({
   bridge,
@@ -26,6 +28,8 @@ export default function App({
   const { instance } = state;
 
   useEffect(() => {
+    bridge.send('INIT', null);
+
     const unsubscribes = [
       bridge.listen('UPDATE', (update) => {
         setState((s) => immer(s, (draft) => {
@@ -68,6 +72,7 @@ export default function App({
     <BridgeContext.Provider
       value={bridge}
     >
+      <Global styles={globalCss + highlightCss} />
       <div
         style={{
           height: '100%',

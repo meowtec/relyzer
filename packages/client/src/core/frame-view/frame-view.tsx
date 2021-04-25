@@ -1,21 +1,18 @@
-import React, {
+import {
   useCallback,
   useContext,
-  useMemo,
   useState,
+  memo,
 } from 'react';
 import {
   ObservedMeta,
   PlainCollectorFrame,
-  utils,
 } from '@relyzer/shared';
-import parse, { isMarker, LeafToken, MarkerBlock } from './highlight';
-import Marker from './code-marker';
-import Tokens from './code-tokens';
-import PropsView from './props-view';
-import UpdateHistory from './history';
-import { BridgeContext } from './context';
-import { commonStyles } from './styles';
+import CodeBlock from '../code-block';
+import PropsView from '../props-view';
+import UpdateHistory from '../history/history';
+import { BridgeContext } from '../../context';
+import { commonStyles } from '../../styles';
 
 interface FrameViewProps {
   collectorId: number;
@@ -41,16 +38,6 @@ function FrameView({
     if (!frames[index] && index > -1) bridge?.send('REQUEST_FRAME', index);
     setActiveIndex(index);
   }, [bridge, frames]);
-
-  const tokens = useMemo(
-    () => parse(code, observedList.map((item) => utils.parseLoc(item.loc))),
-    [code, observedList],
-  );
-
-  const locIndexMap = useMemo(
-    () => new Map(observedList.map((item, index) => [item.loc, index])),
-    [observedList],
-  );
 
   const frame = activeIndex === -1 ? latestFrame : frames[activeIndex];
 
@@ -90,51 +77,17 @@ function FrameView({
       >
         <div
           css={[commonStyles.customNativeScroll, {
-            lineHeight: 1.8,
             overflow: 'auto',
             flex: 1,
             flexGrow: 2,
           }]}
         >
-          <code>
-            <pre
-              css={{
-                margin: 0,
-              }}
-            >
-              {tokens.map((token, index) => {
-                let tk: LeafToken[];
-
-                if (isMarker(token)) {
-                  const locIndex = locIndexMap.get(token.loc)!;
-
-                  if (frame) {
-                    const record = frame.records[locIndex];
-
-                    return (
-                      <Marker
-                        key={token.loc}
-                        collectorId={collectorId}
-                        frameId={frame.id}
-                        locIndex={locIndex}
-                        marker={token as MarkerBlock}
-                        object={record}
-                        updatedTimes={frame.updatedTimes[locIndex]}
-                        updated={frame.updatedIds.includes(locIndex)}
-                      />
-                    );
-                  }
-
-                  tk = token.children;
-                } else {
-                  tk = token;
-                }
-
-                // eslint-disable-next-line react/no-array-index-key
-                return <Tokens key={index} tokens={tk} />;
-              })}
-            </pre>
-          </code>
+          <CodeBlock
+            collectorId={collectorId}
+            code={code}
+            observedList={observedList}
+            frame={frame}
+          />
         </div>
         {
           frame && (
@@ -159,4 +112,4 @@ function FrameView({
   );
 }
 
-export default React.memo(FrameView);
+export default memo(FrameView);

@@ -1,12 +1,14 @@
 import {
   KeyboardEventHandler,
   useCallback,
+
   useState,
 } from 'react';
-import { usePopper as usePopperRaw } from 'react-popper';
+import useRefId from './use-ref-id';
 
-export function useHover() {
+export default function useHover() {
   const [hovered, setHovered] = useState(false);
+  const id = useRefId();
 
   const onMouseEnter = useCallback(() => {
     setHovered(true);
@@ -28,17 +30,6 @@ export function useHover() {
     onMouseLeave,
     onKeyPress,
     hovered,
-  };
-}
-
-export function usePopper(options: Parameters<typeof usePopperRaw>[2]) {
-  const [referenceElement, setReferenceElement] = useState<HTMLElement | null>(null);
-  const [popperElement, setPopperElement] = useState<HTMLElement | null>(null);
-  const result = usePopperRaw(referenceElement, popperElement, options);
-
-  return {
-    ...result,
-    setReferenceElement,
-    setPopperElement,
+    id,
   };
 }

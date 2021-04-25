@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
 import { create as createJSS } from 'jss';
-import { CacheProvider, Global } from '@emotion/react';
+import { CacheProvider } from '@emotion/react';
 import createEmotionCache from '@emotion/cache';
 import {
   Bridge,
@@ -9,16 +8,18 @@ import {
   ClientBridge,
 } from '@relyzer/shared';
 import { jssPreset, StylesProvider } from '@material-ui/styles';
-import InspectFrame from './inspect-frame';
-import App from './app';
+import InspectFrame from './devtool';
+import App from './core/app';
 import { RenderRootContext } from './context';
-import { globalCss, highlightCss } from './styles';
 
-console.log(ReactDOM);
+const TAG_NAME = 'relyzer-debugger';
+
+// avoid re-define when hot reload
+if (!customElements.get(TAG_NAME)) {
+  customElements.define('relyzer-debugger', HTMLDivElement, { extends: 'div' });
+}
 
 export function createHookDebugger(root: HTMLElement, bridgeProvider: BridgeProvider) {
-  customElements.define('relyzer-debugger', HTMLDivElement, { extends: 'div' });
-
   const createDiv = () => document.createElement('div');
 
   const div = document.createElement('relyzer-debugger');
@@ -29,7 +30,7 @@ export function createHookDebugger(root: HTMLElement, bridgeProvider: BridgeProv
 
   const styleRoot = createDiv();
   const appRoot = createDiv();
-  // workaround
+  // workaround for the bug of material-ui
   const portalRootContainer = createDiv();
   const portalRoot = createDiv();
 
@@ -49,7 +50,6 @@ export function createHookDebugger(root: HTMLElement, bridgeProvider: BridgeProv
   root.appendChild(div);
 
   const bridge: ClientBridge = new Bridge(bridgeProvider, 'CLIENT');
-  bridge.send('INIT', null);
 
   ReactDOM.render(
     <RenderRootContext.Provider
@@ -63,7 +63,6 @@ export function createHookDebugger(root: HTMLElement, bridgeProvider: BridgeProv
         <CacheProvider
           value={emotionCache}
         >
-          <Global styles={globalCss + highlightCss} />
           <InspectFrame>
             <App
               bridge={bridge}

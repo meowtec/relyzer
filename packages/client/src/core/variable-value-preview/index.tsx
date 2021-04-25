@@ -1,6 +1,6 @@
 import React from 'react';
 import { ObjectSummary } from '@relyzer/shared';
-import { commonStyles } from './styles';
+import { commonStyles } from '../../styles';
 
 function VariablePreview({ value: [type, val], onClick }: {
   value: ObjectSummary,

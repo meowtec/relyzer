@@ -1,3 +1,4 @@
+// @ts-check
 /**
  * disabled __REACT_DEVTOOLS_GLOBAL_HOOK__ when bundle react to dist file
  * make sure that relyzer client ui not display in devtool
@@ -7,6 +8,7 @@ export default function disableReactDevtool() {
    * @type {import('vite').Plugin}
    */
   const plugin = {
+    name: 'disable-react-devtool',
     transform(code, id) {
       if (id.includes('/react-dom/')) {
         return code.replace(

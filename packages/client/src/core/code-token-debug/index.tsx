@@ -1,7 +1,7 @@
 import React, { Fragment, useContext, useState } from 'react';
 import { Button, Menu, MenuItem } from '@material-ui/core';
 import { BugReport } from '@material-ui/icons';
-import { RenderRootContext } from './context';
+import { RenderRootContext } from '../../context';
 
 export default function CodeTokenDebug({
   onDebug,

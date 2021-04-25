@@ -1,4 +1,4 @@
-import { LeafToken } from './highlight';
+import { LeafToken } from '../../utils/highlight';
 
 export default function Tokens({ tokens }: { tokens: LeafToken[] }) {
   return (

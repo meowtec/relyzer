@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import {
   PropsWithChildren, useContext, useEffect, useMemo,
 } from 'react';
-import { RenderRootContext } from './context';
+import { RenderRootContext } from '../../context';
 
 export default function ToBody({ children }: PropsWithChildren<{}>) {
   const container = useContext(RenderRootContext).portalRoot || document.body;

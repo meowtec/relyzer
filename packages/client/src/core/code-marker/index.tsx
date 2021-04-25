@@ -1,14 +1,14 @@
 import { ObjectSummary } from '@relyzer/shared';
-import React, {
+import {
   useCallback, useContext, useRef, Fragment,
 } from 'react';
 import useMergedRef from '@react-hook/merged-ref';
-import Tokens from './code-tokens';
-import { MarkerBlock } from './highlight';
-import { usePopper, useHover } from './hooks';
-import CodeMarkerPopover from './code-marker-popover';
-import { BridgeContext } from './context';
-import { atomColor } from './styles';
+import Tokens from '../code-tokens';
+import { MarkerBlock } from '../../utils/highlight';
+import { useHover, usePopper } from '../../hooks';
+import CodeMarkerPopover from './popover';
+import { BridgeContext } from '../../context';
+import { atomColor } from '../../styles';
 
 interface MarkerProps {
   collectorId: number;
@@ -36,6 +36,7 @@ export default function Marker({
     onMouseLeave,
     onKeyPress,
     hovered,
+    id,
   } = useHover();
 
   const {
@@ -96,7 +97,7 @@ export default function Marker({
         <span
           tabIndex={0}
           role="button"
-          aria-describedby="code-marker-popover"
+          aria-describedby={id}
           onKeyPress={onKeyPress}
           ref={mergedRef}
         >
@@ -106,6 +107,7 @@ export default function Marker({
         {hovered && (
           <CodeMarkerPopover
             ref={setPopperElement}
+            id={id}
             object={object}
             updatedTimes={updatedTimes}
             attributes={attributes.popper}

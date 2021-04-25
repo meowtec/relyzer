@@ -1,8 +1,8 @@
-import React, { PropsWithChildren, useContext } from 'react';
+import { PropsWithChildren, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
 import { TrackChanges } from '@material-ui/icons';
 import { Paper, Button, Tooltip } from '@material-ui/core';
-import { FrameVisibleContext, RenderRootContext } from './context';
+import { FrameVisibleContext, RenderRootContext } from '../context';
 
 interface InspectFrameUserConfig {
   fold: boolean;

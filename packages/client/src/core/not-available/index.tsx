@@ -1,5 +1,4 @@
-import React from 'react';
-import { parseComponentDisplayName } from './utils';
+import { parseComponentDisplayName } from '../../utils';
 
 interface EmptyProps {
   selectedComponentName: string | null | undefined;
@@ -34,7 +33,7 @@ export default function Empty({ selectedComponentName }: EmptyProps) {
                 {parsedNames[parsedNames.length - 1]}
                 &gt;
               </code>
-              无法被观测。可能是因为缺少
+              无法被观察。可能是因为缺少
               <code
                 css={{
                   padding: '0 8px',
@@ -45,7 +44,7 @@ export default function Empty({ selectedComponentName }: EmptyProps) {
               注释，或者 React Devtool 不是最新版本。
             </span>
           )
-          : '请使用 React Devtool 选中需要观测的组件'
+          : '请使用 React Devtool 选中需要观察的组件'
       }
     </div>
   );
