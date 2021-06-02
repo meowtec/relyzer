@@ -17,12 +17,11 @@ class Backend {
   bridge: BackendBridge | null = null;
 
   constructor() {
-    this.watchInspectedInstance();
-    if (window.__RELYZER_EXTERNAL_ONLY__) {
-      this.createPostMessageBridge();
-    } else {
-      this.createInlineBridge();
+    if (window.location.search.includes('__no_relyzer__')) {
+      return;
     }
+    this.watchInspectedInstance();
+    this.createInlineBridge();
   }
 
   componentSyncWeapSet = new WeakSet<Collector>();
@@ -144,7 +143,7 @@ class Backend {
   }
 
   createPostMessageBridge() {
-    const win = window.open('http://localhost:8880');
+    const win = window.open(`http://localhost:8880/?${window.__RELYZER_EXTERNAL_ONLY__ ? '__no_relyzer__' : ''}`);
     if (win) {
       const bridge = this.createBridge(createBackendBridgeProvider(win));
       listenOnClosed(win, () => {

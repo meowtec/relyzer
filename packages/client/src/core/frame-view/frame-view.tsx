@@ -97,6 +97,7 @@ function FrameView({
                 flex: 1,
                 flexGrow: 1,
                 padding: '0 12px',
+                background: '#f6f6f6',
               }}
             >
               <PropsView

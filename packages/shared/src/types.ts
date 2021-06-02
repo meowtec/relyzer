@@ -22,6 +22,7 @@ export interface ComponentMetaData {
   code: string;
   loc?: string;
   observedList: ObservedMeta[];
+  shouldDetectCallStack: boolean;
 }
 
 export interface DevtoolHook<T = any> {

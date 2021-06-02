@@ -3,6 +3,7 @@ packages/*/lib
 packages/*/es
 packages/*/coverage
 packages/**/dist
+packages/**/dist-*
 packages/**/out
 packages/**/output
 packages/**/build

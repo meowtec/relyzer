@@ -12,6 +12,8 @@ export function obj2ast(object: any, b: typeof babel):
       return t.numericLiteral(object);
     case 'string':
       return t.stringLiteral(object);
+    case 'boolean':
+      return t.booleanLiteral(object);
     case 'undefined':
       return t.identifier('undefined');
     case 'object':
@@ -29,6 +31,6 @@ export function obj2ast(object: any, b: typeof babel):
         ),
       );
     default:
-      throw new Error('unsupport type');
+      throw new Error(`Unsupport type ${typeof object}`);
   }
 }

@@ -7,10 +7,6 @@ import useOnEnter from "../hooks/useOnEnter";
 import useTodos from "../reducers/useTodos";
 import TodoItem from "./TodoItem";
 
-console.log('list');
-/**
- * @component
- */
 export default function TodoList() {
   const router = useRouter();
 

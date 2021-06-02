@@ -5,6 +5,8 @@ import reactRefresh from '@vitejs/plugin-react-refresh';
 import disableReactDevtool from './vite/disable-react-devtool';
 import relyzer from './vite/babel-relyzer';
 
+const { BUILD_APP } = process.env;
+
 /**
  * @type { import('vite').UserConfig }
  */
@@ -27,14 +29,17 @@ const config = {
     jsxInject: 'import { jsx } from \'@emotion/react\'',
   },
   build: {
-    lib: {
-      entry: path.resolve(__dirname, 'src/index.tsx'),
-      formats: ['es'],
+    ...BUILD_APP ? {
+      outDir: 'dist-standalone',
+    } : {
+      outDir: 'dist',
+      lib: {
+        entry: path.resolve(__dirname, 'src/index.tsx'),
+        formats: ['es'],
+      },
+      minify: false,
     },
-    minify: false,
-    rollupOptions: {
-      // external: ['react', 'react-dom'],
-    },
+    rollupOptions: {},
   },
 };
 

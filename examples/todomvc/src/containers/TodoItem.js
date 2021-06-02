@@ -5,9 +5,6 @@ import useDoubleClick from "../hooks/useDoubleClick";
 import useOnEnter from "../hooks/useOnEnter";
 import useTodos from "../reducers/useTodos";
 
-/**
- * @component
- */
 export default function TodoItem({ todo }) {
   const [, { deleteTodo, setLabel, toggleDone }] = useTodos(() => null);
 

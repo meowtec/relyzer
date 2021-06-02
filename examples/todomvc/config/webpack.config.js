@@ -406,7 +406,12 @@ module.exports = function (webpackEnv) {
                 ],
 
                 plugins: [
-                  require.resolve('@relyzer/babel'),
+                  [
+                    require.resolve('@relyzer/babel'),
+                    {
+                      autoDetect: true,
+                    },
+                  ],
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {

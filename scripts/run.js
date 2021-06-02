@@ -19,5 +19,6 @@ const parallel = flag === '--parallel';
   const cmd = `npm run ${command}`;
   shell.exec(cmd, {
     async: parallel,
+    fatal: true,
   });
 });

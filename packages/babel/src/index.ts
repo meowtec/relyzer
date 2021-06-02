@@ -2,7 +2,7 @@
 import { flatMap } from 'lodash';
 import type * as babel from '@babel/core';
 import jsx from '@babel/plugin-syntax-jsx';
-import type {
+import {
   ArrayPattern,
   ArrowFunctionExpression,
   BlockStatement,
@@ -25,6 +25,12 @@ import {
 } from '@relyzer/shared';
 import { parse as parseComment } from 'comment-parser';
 import { obj2ast } from './object-ast';
+
+export interface RelyzerBabelPluginOptions {
+  autoDetect?: boolean;
+  include?: string[];
+  exclude?: string[];
+}
 
 const runtimePackageName = '@relyzer/runtime';
 
@@ -50,6 +56,7 @@ interface PerfScopeStack {
   identifier: Identifier;
   return: PerfScopeStack | null;
   observedList: ObservedMeta[];
+  isAutoDetected: boolean;
 }
 
 interface VisitorState extends babel.PluginPass {
@@ -72,20 +79,82 @@ const getRelativeLoc = (offset: SourceLocation, child: SourceLocation): Loc => [
 
 const buildLocStr = (loc: SourceLocation) => utils.stringifyLoc(transformBabelLoc(loc));
 
+const isFirstCap = (str: string) => /^[A-Z]/.test(str);
+
+const isFirstCapFunction = (
+  nodePath: babel.NodePath<FunctionExpressionOrDeclaration>,
+  b: typeof babel,
+) => {
+  /**
+   * function Name() {}
+   */
+  if (
+    nodePath.isFunctionDeclaration()
+    && isFirstCap(nodePath.node.id?.name ?? '')
+  ) return true;
+
+  /**
+   * const A = function() {}
+   * const A = () => {}
+   */
+  if (
+    (nodePath.isFunctionExpression() || nodePath.isArrowFunctionExpression())
+    && nodePath.parentPath.isVariableDeclarator()
+    && b.types.isIdentifier(nodePath.parentPath.node.id)
+    && isFirstCap(nodePath.parentPath.node.id.name)
+  ) return true;
+
+  /**
+   * const A = memo(() => {})
+   * const A = memo(funct() => {})
+   */
+  if (
+    (nodePath.isFunctionExpression() || nodePath.isArrowFunctionExpression())
+    && nodePath.parentPath.isCallExpression()
+    && nodePath.parentPath.parentPath.isVariableDeclarator()
+    && b.types.isIdentifier(nodePath.parentPath.parentPath.node.id)
+    && isFirstCap(nodePath.parentPath.parentPath.node.id.name)
+  ) return true;
+
+  return false;
+};
+
 const isComponentComments = (comments: readonly babel.types.Comment[] | null) => comments?.some((comment) => {
   const parsedComment = parseComment(`/*${comment.value}*/`);
   return parsedComment.some((c) => c.tags.some((tag) => tag.tag === 'component'));
 });
 
-const detectIsNodePathComponent = (nodePath: babel.NodePath<any>) => {
-  let p = nodePath;
+const isDirectivedBlockment = (
+  node: babel.types.BlockStatement,
+) => node.directives.some(
+  (directive) => directive.value.value === 'use relyzer',
+);
 
+const detectIsNodePathComponent = (
+  nodePath: babel.NodePath<FunctionExpressionOrDeclaration>,
+  b: typeof babel,
+) => {
+  let p: babel.NodePath<any> = nodePath;
+
+  /**
+   * detect for comment `@component`
+   */
   while (p && p.type !== 'BlockStatement') {
     if (isComponentComments(p.node.leadingComments)) {
       return true;
     }
 
     p = p.parentPath;
+  }
+
+  /**
+   * detect for 'use relyzer'
+   */
+  if (
+    b.types.isBlockStatement(nodePath.node.body)
+    && isDirectivedBlockment(nodePath.node.body)
+  ) {
+    return true;
   }
 
   return false;
@@ -126,15 +195,41 @@ const observeExpr = (
   );
 };
 
+const shouldResolveFile = (filename: string, options: RelyzerBabelPluginOptions): boolean => {
+  if (!filename) {
+    return true;
+  }
+
+  if ((
+    options.include && !options.include.some((item) => filename.includes(item))
+  )) {
+    return false;
+  }
+
+  const exclude = options.exclude ?? ['node_modules'];
+
+  if (exclude.some((item) => filename.includes(item))) {
+    return false;
+  }
+
+  return true;
+};
+
 export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorState> {
   const t = bb.types;
   // add `const collect = useRelyzer(code, loc)`
-  // TODO: collect arguments
   const functionVisit: VisitNodeObject<VisitorState, any> = {
     enter(nodePath: babel.NodePath<FunctionExpressionOrDeclaration>, state) {
-      const shouldInspect = detectIsNodePathComponent(nodePath);
+      const options = (state.opts as RelyzerBabelPluginOptions);
+      if (!shouldResolveFile(state.filename, options)) {
+        return;
+      }
+      const isAutoDetected = !!(options.autoDetect && isFirstCapFunction(nodePath, bb));
 
-      if (shouldInspect && nodePath.node.loc) {
+      if (
+        (isAutoDetected || detectIsNodePathComponent(nodePath, bb))
+        && nodePath.node.loc
+      ) {
         const code = this.file.code.slice(nodePath.node.start!, nodePath.node.end!);
 
         const blockPath = nodePath.get('body');
@@ -150,6 +245,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
           identifier: perfIdentifier,
           return: state.collectorScopeStack,
           observedList: [],
+          isAutoDetected,
         };
       }
     },
@@ -174,6 +270,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
         code,
         loc: buildLocStr(node.loc),
         observedList,
+        shouldDetectCallStack: collectorScopeStack.isAutoDetected,
       };
 
       const useRelyzerDeclaration = t.variableDeclaration('const', [
