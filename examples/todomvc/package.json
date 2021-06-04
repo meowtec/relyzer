@@ -71,8 +71,8 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "devDependencies": {
-    "@relyzer/babel": "^1.0.0-alpha.1",
-    "@relyzer/runtime": "^1.0.0-alpha.1",
+    "@relyzer/babel": "^1.0.0-alpha.2",
+    "@relyzer/runtime": "^1.0.0-alpha.2",
     "gh-pages": "^2.2.0",
     "serve": "^10.0.2"
   },
