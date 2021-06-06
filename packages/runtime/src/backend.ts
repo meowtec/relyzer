@@ -142,8 +142,24 @@ class Backend {
     this.bridge = null;
   }
 
+  createPostMessageBridgeWindow() {
+    if (window.__RELYZER_DEV__) {
+      return window.open(`http://localhost:8880/?${window.__RELYZER_IS_TERMINAL__ ? '__no_relyzer__' : ''}`);
+    }
+
+    const win = window.open();
+    if (win) {
+      win.document.write(`
+        <div id="root"></div>
+        <script src="https://unpkg.com/@relyzer/client@1.0.0-alpha.3/dist/standalone.iife.js"></script>
+      `);
+    }
+
+    return win;
+  }
+
   createPostMessageBridge() {
-    const win = window.open(`http://localhost:8880/?${window.__RELYZER_EXTERNAL_ONLY__ ? '__no_relyzer__' : ''}`);
+    const win = this.createPostMessageBridgeWindow();
     if (win) {
       const bridge = this.createBridge(createBackendBridgeProvider(win));
       listenOnClosed(win, () => {

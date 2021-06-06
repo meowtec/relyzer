@@ -2,7 +2,7 @@
   "name": "example-webpack",
   "private": true,
   "scripts": {
-    "start": "webpack serve --mode development --hot-only --port 3100"
+    "start": "RELYZER_DEV=true webpack serve --mode development --hot-only --port 3100"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

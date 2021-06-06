@@ -5,16 +5,16 @@ import reactRefresh from '@vitejs/plugin-react-refresh';
 import disableReactDevtool from './vite/disable-react-devtool';
 import relyzer from './vite/babel-relyzer';
 
-const { BUILD_APP } = process.env;
+const { BUILD_APP, RELYZER_DEV } = process.env;
 
 /**
  * @type { import('vite').UserConfig }
  */
 const config = {
   plugins: [
-    reactRefresh(),
-    disableReactDevtool(),
+    !BUILD_APP ? disableReactDevtool() : null,
     relyzer(),
+    reactRefresh(),
   ],
   optimizeDeps: {
     include: [
@@ -27,6 +27,9 @@ const config = {
   esbuild: {
     jsxFactory: 'jsx',
     jsxInject: 'import { jsx } from \'@emotion/react\'',
+  },
+  define: {
+    'window.__RELYZER_DEV__': RELYZER_DEV,
   },
   build: {
     ...BUILD_APP ? {

@@ -6,6 +6,8 @@ import {
 import { postMessageBridgeProvider } from './bridge/bridge-provider';
 import App from './core/app';
 
+document.title = 'relyzer';
+
 const bridge: ClientBridge = new Bridge(postMessageBridgeProvider, 'CLIENT');
 
 ReactDOM.render(

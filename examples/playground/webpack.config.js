@@ -63,7 +63,7 @@ const config = {
   plugins: [
     isDevelopment && new ReactRefreshWebpackPlugin(),
     new webpack.DefinePlugin({
-      'window.__RELYZER_DEV__': process.env.__RELYZER_DEV__,
+      'window.__RELYZER_DEV__': process.env.RELYZER_DEV,
     }),
   ].filter(Boolean),
 };

@@ -15,7 +15,7 @@
   },
   "scripts": {
     "prepublishOnly": "npm run tsc && npm run build",
-    "start": "vite",
+    "start": "RELYZER_DEV=true vite",
     "build": "rm -rf lib dist && npm run tsc && vite build && BUILD_APP=1 vite build && cp -r dist-standalone/ dist",
     "lint": "tsc --noEmit --project tsconfig-build.json",
     "tsc": "rm -rf lib && tsc --project tsconfig-build.json",
