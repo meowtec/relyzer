@@ -13,6 +13,8 @@ export default function relyzer() {
    * @type {import('vite').Plugin}
    */
   const plugin = {
+    name: 'relyzer',
+
     enforce: 'pre',
 
     configResolved(config) {

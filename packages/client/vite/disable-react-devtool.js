@@ -8,6 +8,8 @@ export default function disableReactDevtool() {
    * @type {import('vite').Plugin}
    */
   const plugin = {
+    name: 'disable-react-devtool',
+
     transform(code, id) {
       if (id.includes('/react-dom/')) {
         return code.replace(
