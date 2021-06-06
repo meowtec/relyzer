@@ -8,8 +8,7 @@
   "main": "dist/client.es.js",
   "types": "lib/index.d.ts",
   "files": [
-    "dist",
-    "dist-standalone"
+    "dist"
   ],
   "publishConfig": {
     "access": "public"
@@ -17,7 +16,7 @@
   "scripts": {
     "prepublishOnly": "npm run tsc && npm run build",
     "start": "vite",
-    "build": "rm -rf lib dist  && npm run tsc && vite build && BUILD_APP=1 vite build",
+    "build": "rm -rf lib dist && npm run tsc && vite build && BUILD_APP=1 vite build && cp -r dist-standalone/ dist",
     "lint": "tsc --noEmit --project tsconfig-build.json",
     "tsc": "rm -rf lib && tsc --project tsconfig-build.json",
     "watch": "tsc --project tsconfig-build.json -w"

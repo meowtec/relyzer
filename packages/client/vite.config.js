@@ -31,6 +31,12 @@ const config = {
   build: {
     ...BUILD_APP ? {
       outDir: 'dist-standalone',
+      lib: {
+        name: 'relyzer', // unused but required
+        fileName: 'standalone',
+        entry: path.resolve(__dirname, 'src/standalone.tsx'),
+        formats: ['iife'],
+      },
     } : {
       outDir: 'dist',
       lib: {
