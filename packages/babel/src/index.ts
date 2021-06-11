@@ -299,7 +299,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
           [t.identifier(propsParam.name), t.numericLiteral(VIRTUAL_LOC.PROPS)],
         );
 
-        beforeInsertedNodes.push(observePropsExpr!);
+        beforeInsertedNodes.push(t.expressionStatement(observePropsExpr));
 
         if (t.isObjectPattern(originalPropsParam)) {
           const propsPatternDeclaration = t.variableDeclaration('let', [
@@ -412,14 +412,17 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
 
       // add `perf(name, loc)`
       const perfExps = removeNull(identifiers.map(
-        (identifier) => observeExpr({
-          t,
-          scope: collectorScopeStack,
-          expr: t.identifier(identifier.name),
-          loc: identifier.loc,
-          type: 'var',
-          name: identifier.name,
-        }),
+        (identifier) => {
+          const expr = observeExpr({
+            t,
+            scope: collectorScopeStack,
+            expr: t.identifier(identifier.name),
+            loc: identifier.loc,
+            type: 'var',
+            name: identifier.name,
+          });
+          return expr ? t.expressionStatement(expr) : null;
+        },
       ));
 
       if (perfExps.length) {
