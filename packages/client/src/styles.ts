@@ -47,7 +47,7 @@ export const commonStyles = {
 };
 
 export const globalCss = /* css */ `
-  :host {
+  :host, body {
     all: initial;
     cursor: inherit;
     font-size: 12px;
@@ -69,20 +69,20 @@ export const globalCss = /* css */ `
     font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
   }
 
-  :host .MuiPopover-root {
+  div .MuiPopover-root {
     z-index: 9999!important;
   }
 
-  :host .MuiMenuItem-root {
+  div .MuiMenuItem-root {
     font-size: 12px;
     min-height: 15px;
   }
 
-  :host .MuiSvgIcon-root {
+  div .MuiSvgIcon-root {
     font-size: 14px;
   }
 
-  :host .MuiButton-root {
+  div .MuiButton-root {
     min-width: 0;
   }
 `;

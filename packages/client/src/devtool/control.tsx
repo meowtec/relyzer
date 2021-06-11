@@ -84,7 +84,7 @@ function DevtoolControl({
               padding: '0 8px',
             }}
           >
-            placement:
+            Placement:
           </span>
           {
             placementList.map(({ placement: place, Icon }) => (

@@ -73,6 +73,7 @@ function FrameView({
           display: 'flex',
           overflow: 'hidden',
           marginTop: 8,
+          flex: 1,
         }}
       >
         <div
@@ -80,6 +81,8 @@ function FrameView({
             overflow: 'auto',
             flex: 1,
             flexGrow: 2,
+            padding: 8,
+            background: '#f6f6f6',
           }]}
         >
           <CodeBlock
@@ -96,8 +99,7 @@ function FrameView({
                 overflow: 'auto',
                 flex: 1,
                 flexGrow: 1,
-                padding: '0 12px',
-                background: '#f6f6f6',
+                marginLeft: 12,
               }}
             >
               <PropsView

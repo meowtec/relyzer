@@ -171,7 +171,7 @@ export default function UpdateHistory({ activeIndex, totalTimes, onActiveIndexCh
         >
           <FiberSmartRecord
             css={{
-              color: living ? '#6cf' : 'inherit',
+              color: living ? '#6cf' : '#999',
             }}
           />
         </Button>

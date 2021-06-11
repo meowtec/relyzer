@@ -25,6 +25,9 @@ function PropsView({
           margin: '8px 0',
           fontWeight: 'normal',
           display: 'flex',
+          fontSize: 12,
+          marginTop: 0,
+          marginBottom: 8,
           justifyContent: 'space-between',
         }}
       >
@@ -43,7 +46,7 @@ function PropsView({
         css={{
           listStyle: 'none',
           margin: 0,
-          padding: '0 12px',
+          padding: '0 8px',
 
           '& li': {
             display: 'flex',
