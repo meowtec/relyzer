@@ -26,5 +26,5 @@ export function useRelyzer(data: ComponentMetaData) {
     };
   }
 
-  return () => {};
+  return (val: any) => val;
 }
