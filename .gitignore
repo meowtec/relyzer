@@ -15,6 +15,5 @@ yarn-error.log*
 lib
 es
 dist
-build
 .vscode
 **/*.tsbuildinfo

@@ -79,7 +79,7 @@
   "scripts": {
     "dev": "node scripts/start.js",
     "start": "serve -s build",
-    "build": "PUBLIC_URL=. node scripts/build.js",
+    "build": "PUBLIC_URL=./ node scripts/build.js",
     "test": "node scripts/test.js --coverage",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
