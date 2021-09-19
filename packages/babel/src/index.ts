@@ -70,12 +70,16 @@ const transformBabelLoc = (loc: SourceLocation): Loc => [
   loc.end.column,
 ];
 
-const getRelativeLoc = (offset: SourceLocation, child: SourceLocation): Loc => [
-  child.start.line - offset.start.line,
-  child.start.column,
-  child.end.line - offset.start.line,
-  child.end.column,
-];
+const getRelativeLoc = (offset: SourceLocation, child: SourceLocation): Loc => {
+  const column = (position: SourceLocation['start']) => position.column - (position.line === offset.start.line ? offset.start.column : 0);
+
+  return [
+    child.start.line - offset.start.line,
+    column(child.start),
+    child.end.line - offset.start.line,
+    column(child.end),
+  ];
+};
 
 const buildLocStr = (loc: SourceLocation) => utils.stringifyLoc(transformBabelLoc(loc));
 
@@ -464,7 +468,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
      * collect jsx attribute for non native element
      */
     JSXAttribute(nodePath, { collectorScopeStack }) {
-      const funPath = nodePath.find(
+      const funcPath = nodePath.find(
         (path) => (
           path.type === 'FunctionExpression'
           || path.type === 'FunctionDeclaration'
@@ -478,7 +482,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
 
       if (
         !collectorScopeStack
-        || collectorScopeStack.nodePath !== funPath
+        || collectorScopeStack.nodePath !== funcPath
         || !parentPath.isJSXOpeningElement()
         || (t.isJSXIdentifier(parentPath.node.name) && /^[a-z]/.test(parentPath.node.name.name)) // exclude native element like div
         || !attrName.loc
