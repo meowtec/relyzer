@@ -513,7 +513,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
   };
 
   return {
-    visitor,
+    visitor: process.env.NODE_ENV === 'production' ? {} : visitor,
     inherits: jsx,
   };
 }
