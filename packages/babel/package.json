@@ -29,7 +29,6 @@
     "@babel/helper-module-imports": "^7.12.5",
     "@babel/plugin-syntax-jsx": "^7.12.13",
     "@babel/types": "^7.12.12",
-    "@material-ui/styles": "^5.0.0-alpha.25",
     "@relyzer/shared": "^1.0.0-alpha.2",
     "comment-parser": "^1.1.1",
     "lodash": "^4.17.20"

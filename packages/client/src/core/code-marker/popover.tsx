@@ -73,7 +73,7 @@ function CodeMarkerPopover(
         </div>
         <div>
           Updated
-          <strong style={{ fontSize: 14, margin: '0 2px' }}>{updatedTimes}</strong>
+          <strong style={{ fontSize: 14 }}>{` ${updatedTimes} `}</strong>
           {updatedTimes > 1 ? 'times' : 'time'}
         </div>
       </div>

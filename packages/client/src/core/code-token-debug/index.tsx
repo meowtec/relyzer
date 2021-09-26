@@ -22,7 +22,6 @@ export default function CodeTokenDebug({
   return (
     <Fragment>
       <Button
-        // color="default"
         size="small"
         aria-controls="relyzer-log-menu"
         aria-haspopup="true"
@@ -30,7 +29,7 @@ export default function CodeTokenDebug({
         startIcon={<BugReport />}
         onClick={handleClick}
       >
-        LOG
+        print
       </Button>
       <Menu
         id="relyzer-log-menu"

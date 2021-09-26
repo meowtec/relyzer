@@ -49,18 +49,18 @@ type FunctionExpressionOrDeclaration =
   | FunctionDeclaration
   | ArrowFunctionExpression;
 
-interface PerfScopeStack {
+interface RelyzerScopeStack {
   code: string;
   nodePath: babel.NodePath<FunctionExpressionOrDeclaration>;
   blockPath: babel.NodePath<BlockStatement>;
-  identifier: Identifier;
-  return: PerfScopeStack | null;
+  relyzerIdentifier: Identifier;
+  return: RelyzerScopeStack | null;
   observedList: ObservedMeta[];
   isAutoDetected: boolean;
 }
 
 interface VisitorState extends babel.PluginPass {
-  collectorScopeStack: PerfScopeStack | null;
+  collectorScopeStack: RelyzerScopeStack | null;
 }
 
 const transformBabelLoc = (loc: SourceLocation): Loc => [
@@ -85,6 +85,9 @@ const buildLocStr = (loc: SourceLocation) => utils.stringifyLoc(transformBabelLo
 
 const isFirstCap = (str: string) => /^[A-Z]/.test(str);
 
+/**
+ * detect whether a function is named capitalized
+ */
 const isFirstCapFunction = (
   nodePath: babel.NodePath<FunctionExpressionOrDeclaration>,
   b: typeof babel,
@@ -110,7 +113,7 @@ const isFirstCapFunction = (
 
   /**
    * const A = memo(() => {})
-   * const A = memo(funct() => {})
+   * const A = memo(function() {})
    */
   if (
     (nodePath.isFunctionExpression() || nodePath.isArrowFunctionExpression())
@@ -123,12 +126,15 @@ const isFirstCapFunction = (
   return false;
 };
 
+/**
+ * check whether the comments include `@component`
+ */
 const isComponentComments = (comments: readonly babel.types.Comment[] | null) => comments?.some((comment) => {
   const parsedComment = parseComment(`/*${comment.value}*/`);
   return parsedComment.some((c) => c.tags.some((tag) => tag.tag === 'component'));
 });
 
-const isDirectivedBlockment = (
+const isBlockHasRelyzerDirective = (
   node: babel.types.BlockStatement,
 ) => node.directives.some(
   (directive) => directive.value.value === 'use relyzer',
@@ -156,7 +162,7 @@ const detectIsNodePathComponent = (
    */
   if (
     b.types.isBlockStatement(nodePath.node.body)
-    && isDirectivedBlockment(nodePath.node.body)
+    && isBlockHasRelyzerDirective(nodePath.node.body)
   ) {
     return true;
   }
@@ -164,6 +170,19 @@ const detectIsNodePathComponent = (
   return false;
 };
 
+/**
+ * create a observer expression for an expression
+ * transform from:
+ * ```
+ * expr;
+ * ```
+ *
+ * to:
+ * ```
+ * p(expr, loc);
+ * ```
+ * and add extra data to scope.observedList
+ */
 const observeExpr = (
   {
     t,
@@ -174,7 +193,7 @@ const observeExpr = (
     loc,
   }: {
     t: typeof babel.types,
-    scope: PerfScopeStack,
+    scope: RelyzerScopeStack,
     expr: Expression,
     type: ObservedMeta['type'],
     name: string,
@@ -182,7 +201,7 @@ const observeExpr = (
   },
 ) => {
   if (loc == null) return null;
-  const { observedList, nodePath, identifier } = scope;
+  const { observedList, nodePath, relyzerIdentifier } = scope;
 
   const locStr = utils.stringifyLoc(getRelativeLoc(nodePath.node.loc!, loc));
   if (observedList.find((item) => item.loc === locStr)) return null;
@@ -194,7 +213,7 @@ const observeExpr = (
   });
 
   return t.callExpression(
-    t.identifier(identifier.name),
+    t.identifier(relyzerIdentifier.name),
     [expr, t.numericLiteral(count - 1)],
   );
 };
@@ -246,7 +265,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
           code,
           blockPath,
           nodePath,
-          identifier: perfIdentifier,
+          relyzerIdentifier: perfIdentifier,
           return: state.collectorScopeStack,
           observedList: [],
           isAutoDetected,
@@ -265,7 +284,7 @@ export default function relyzerBabel(bb: typeof babel): babel.PluginObj<VisitorS
       const {
         blockPath,
         code,
-        identifier,
+        relyzerIdentifier: identifier,
         observedList,
       } = collectorScopeStack;
 
