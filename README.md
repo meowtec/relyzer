@@ -21,32 +21,33 @@ npm i relyzer -D
 }
 ```
 
-Before use, you probably need to know how **Relyzer** works:
+**Notice that `@relyzer/babel` will do nothing when `process.env.NODE_ENV === 'production'`**
 
-In order to collect the runtime infomations, it uses babel to transform the functional component code, adding some hooks code into the body.
+Before the use, you probably need to know how **Relyzer** works:
+
+In order to collect the runtime information, **Relyzer** uses babel to transform the functional component code, adding some hooks code into the body.
 
 ```diff
 function MyComponent() {
   // relyzer will auto add some code
 +  const r = useRelyzer()
   const a = useCallback()
-+  r.foo()
++  r(a)
   ...
-+  r.bar()
++  r()
 }
 ```
 
-So it is important to ensure that the additional code only be added and runs in real functional components.
+React hooks could only properly run inside functional components or other hooks. So it is important to ensure that the additional code only be added and runs in real functional components.
 
-There are two way for that:
+There are two way for that purpose:
 
-The one is that you should tell relyzer which functions are React components and should be transformed.
+### (1) Add jsdoc
 
-You can use `@component` or `'use relyzer'` for marking the function as a component:
-
-### Add jsdoc
+Use `@component` or `'use relyzer'` for explicitly marking the function as a component:
 
 Add `@component` tag in jsdoc of your react component
+
 ```diff
 /**
  * my component
@@ -73,9 +74,12 @@ function MyComponent() {
 }
 ```
 
-The second way, is to tell Relyzer to auto detect the components.
+### (2) Use the `autoDetect` option
 
-Relyzer will treat functions with uppercase first letter as functional components. And when the added hook `useRelyzer` be called, it will check whether the function is called in the React render call stack.
+Tell Relyzer to auto detect the components.
+
+Relyzer will inject `useRelyzer` to all the functions with uppercase first letter.
+When `useRelyzer` called, it will try to check whether the function is called in the React render call stack
 
 ```diff
 {
@@ -93,4 +97,4 @@ Make sure you have installed the latest **React Devtool** in Chrome or Firefox.
 
 1. Start the dev server and open browser page
 2. Open React Devtool
-3. Select the component in the components view
+3. Select component in the components tree viewer
