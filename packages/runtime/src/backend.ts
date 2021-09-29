@@ -150,7 +150,7 @@ class Backend {
     if (win) {
       win.document.write(`
         <div id="root"></div>
-        <script src="https://unpkg.com/@relyzer/client@1.0.0-alpha.3/dist/standalone.iife.js"></script>
+        <script src="https://unpkg.com/@relyzer/client@1.0.0-alpha.4/dist/standalone.iife.js"></script>
       `);
     }
 

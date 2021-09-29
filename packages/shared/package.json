@@ -1,6 +1,6 @@
 {
   "name": "@relyzer/shared",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.4",
   "description": "relyzer shared api and utils",
   "author": "meowtec <bertonzh@gmail.com>",
   "homepage": "https://github.com/meowtec/relyzer",
