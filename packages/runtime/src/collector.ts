@@ -118,10 +118,19 @@ export default class Collector extends EventEmitter {
    * @param frameId frame id
    * @param loc 值位置
    */
-  inspectValue(frameId: number, loc: number) {
-    const frame = this.frames.find((f) => f.id === frameId);
-    const hasRecord = frame?.records.has(loc);
-    const record = frame?.records.get(loc);
+  inspectValue(frameId: number, loc: number, all: boolean) {
+    let record: any;
+    let hasRecord: boolean;
+
+    if (all) {
+      hasRecord = true;
+      record = this.frames.slice(-100).map((frame) => frame.records.get(loc));
+    } else {
+      const frame = this.frames.find((f) => f.id === frameId);
+      hasRecord = frame?.records.has(loc) ?? false;
+      record = frame?.records.get(loc);
+    }
+
     if (!hasRecord) {
       warn('找不到值');
       return;

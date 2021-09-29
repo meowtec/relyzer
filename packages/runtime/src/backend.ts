@@ -120,8 +120,7 @@ class Backend {
 
     bridge.listen('LOG', (data) => {
       if (this.collector?.id !== data.collectorId) return;
-      // TODO
-      this.collector?.inspectValue(data.frameId, data.loc);
+      this.collector?.inspectValue(data.frameId, data.loc, data.all);
     });
 
     bridge.listen('REQUEST_FRAME', (frameIndex) => {
