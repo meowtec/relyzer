@@ -28,8 +28,6 @@ export default function App({
   const { instance } = state;
 
   useEffect(() => {
-    bridge.send('INIT', null);
-
     const unsubscribes = [
       bridge.listen('UPDATE', (update) => {
         setState((s) => immer(s, (draft) => {
@@ -64,6 +62,8 @@ export default function App({
         }));
       }),
     ];
+
+    bridge.send('INIT', null);
 
     return () => unsubscribes.forEach((off) => off());
   }, [bridge]);
