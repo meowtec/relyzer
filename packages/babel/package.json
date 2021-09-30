@@ -1,6 +1,6 @@
 {
   "name": "@relyzer/babel",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "babel plugin for relyzer",
   "author": "meowtec <bertonzh@gmail.com>",
   "homepage": "https://github.com/meowtec/relyzer",
@@ -29,7 +29,7 @@
     "@babel/helper-module-imports": "^7.12.5",
     "@babel/plugin-syntax-jsx": "^7.12.13",
     "@babel/types": "^7.12.12",
-    "@relyzer/shared": "^1.0.0-alpha.4",
+    "@relyzer/shared": "^1.0.0-alpha.5",
     "comment-parser": "^1.1.1",
     "lodash": "^4.17.20"
   },
@@ -52,6 +52,6 @@
     "typescript": "^4.1.2"
   },
   "peerDependencies": {
-    "@relyzer/runtime": "^1.0.0-alpha.4"
+    "@relyzer/runtime": "^1.0.0-alpha.5"
   }
 }
