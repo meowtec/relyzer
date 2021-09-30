@@ -22,11 +22,11 @@ if (!customElements.get(TAG_NAME)) {
 export function createHookDebugger({
   root,
   bridgeProvider,
-  onPopout,
+  onOpenExternal,
 }: {
   root: HTMLElement;
   bridgeProvider: BridgeProvider;
-  onPopout: () => void;
+  onOpenExternal: () => void;
 }) {
   const createDiv = () => document.createElement('div');
 
@@ -72,7 +72,7 @@ export function createHookDebugger({
           value={emotionCache}
         >
           <InspectFrame
-            onPopout={onPopout}
+            onPopout={onOpenExternal}
           >
             <App
               bridge={bridge}

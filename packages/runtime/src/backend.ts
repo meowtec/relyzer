@@ -173,11 +173,11 @@ class Backend {
     const div = document.createElement('div');
     document.body.appendChild(div);
     const inlineBridge = this.createBridge(bridgeProviderPair[1]);
-    const destoryInlineDebugger = createHookDebugger({
+    const destroyInlineDebugger = createHookDebugger({
       root: div,
       bridgeProvider: bridgeProviderPair[0],
-      onPopout: () => {
-        destoryInlineDebugger();
+      onOpenExternal: () => {
+        destroyInlineDebugger();
         this.destroyBridge(inlineBridge);
         this.createPostMessageBridge();
       },
