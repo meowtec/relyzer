@@ -2,6 +2,10 @@
 
 React functional component debugger.
 
+## Screenshot
+
+<img width="1336" alt="screenshot" src="https://user-images.githubusercontent.com/4006436/137918770-35c4741c-a970-43ab-aba3-f1fff8cb2339.png">
+
 ## Usage
 
 ### Install packages
